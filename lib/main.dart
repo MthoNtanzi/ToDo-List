@@ -9,7 +9,7 @@ class ToDoApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
+    return MaterialApp(
       title: "Todo Manager",
       theme: ThemeData(
           primarySwatch: Colors.blue
@@ -88,16 +88,18 @@ class _TodoListState extends  State<TodoList>{
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [],
-        ),
+      body: ListView(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        children: _todos.map((Todo todo){
+          return ToDoItem(
+          todo: todo,
+          );
+      }).toList(),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: ()=> _displayDialog(),
         tooltip: "Add a Todo",
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }
@@ -122,5 +124,29 @@ class ToDoItem extends StatelessWidget{
       decoration: TextDecoration.lineThrough,
     );
   }
-
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      onTap: () {},
+      leading: Checkbox(
+        checkColor: Colors.greenAccent,
+          activeColor: Colors.red,
+          value: todo.completed,
+          onChanged: (value) {},
+      ),
+      title: Row(children: [
+        Expanded(child: Text(todo.name, style: _getTextStyle(todo.completed))),
+        IconButton(
+            iconSize: 30,
+            icon: const Icon(
+              Icons.delete,
+              color: Colors.red,
+            ),
+          alignment: Alignment.centerRight,
+          onPressed: (){},
+        )
+      ],
+      ),
+    );
+  }
 }
