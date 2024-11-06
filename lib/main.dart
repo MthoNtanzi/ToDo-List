@@ -46,6 +46,12 @@ class _TodoListState extends  State<TodoList>{
     });
   }
 
+  void _deleteTodo(Todo todo){
+    setState(() {
+      _todos.removeWhere((element)=> element.name == todo.name);
+    });
+  }
+
   Future<void> _displayDialog() async {
     return showDialog(
         context: context,
@@ -100,6 +106,7 @@ class _TodoListState extends  State<TodoList>{
           return ToDoItem(
           todo: todo,
             onTodoChanged: _handleTodoChange,
+            removeTodo: _deleteTodo
           );
       }).toList(),
       ),
@@ -119,10 +126,11 @@ class Todo {
 }
 
 class ToDoItem extends StatelessWidget{
-  ToDoItem({required this.todo, required this.onTodoChanged}) : super(key: ObjectKey(todo));
+  ToDoItem({required this.todo, required this.onTodoChanged, required this.removeTodo}) : super(key: ObjectKey(todo));
 
   final Todo todo;
   final void Function(Todo todo) onTodoChanged;
+  final void Function(Todo todo) removeTodo;
 
   TextStyle ? _getTextStyle(bool checked){
     if (!checked) return null;
@@ -153,7 +161,9 @@ class ToDoItem extends StatelessWidget{
               color: Colors.red,
             ),
           alignment: Alignment.centerRight,
-          onPressed: (){},
+          onPressed: (){
+              removeTodo(todo);
+          },
         )
       ],
       ),
